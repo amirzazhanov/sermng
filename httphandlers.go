@@ -15,6 +15,6 @@ func HandlerImages(w http.ResponseWriter, r *http.Request) {
 // HandlerHTML - handler for /rss/ url
 func HandlerHTML(w http.ResponseWriter, r *http.Request) {
 	pTmp := &Page{Title: "TestPage", Body: []byte("This is a sample simple Page.")}
-	t, _ := template.ParseFiles("template.html")
+	t, _ := template.ParseFiles("template.tpl", "bootstrap4_css.tpl")
 	t.Execute(w, pTmp)
 }
