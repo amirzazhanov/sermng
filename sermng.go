@@ -26,6 +26,6 @@ func Log(handler http.Handler) http.Handler {
 
 func main() {
 	http.HandleFunc("/html/", HandlerHTML)
-	http.HandleFunc("v1/records", HandlerRecords)
+	http.HandleFunc("/v1/records", HandlerRecords)
 	log.Fatal(http.ListenAndServe(":8080", Log(http.DefaultServeMux)))
 }
