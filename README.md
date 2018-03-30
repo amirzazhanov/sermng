@@ -1,9 +1,9 @@
 # sermng
-manage single table CSV database with web app and REST API
+manage single table JSON database with web app and REST API
 
 do not use 3rd party http router (Just for fun)
 
-## CSV FORMAT
+## JSON FORMAT
 id,description,counter,url
 
 * id - numeric record ID (autoincrement)

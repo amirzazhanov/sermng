@@ -6,8 +6,11 @@ package main
 // https://thenewstack.io/make-a-restful-json-api-go/
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 )
 
 // Page structure simple
@@ -25,6 +28,21 @@ func Log(handler http.Handler) http.Handler {
 }
 
 func main() {
+	// Open our jsonFile
+	jsonFile, err := os.Open("records.json")
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println("Successfully Opened users.json")
+	// defer the closing of our jsonFile so that we can parse it later on
+	defer jsonFile.Close()
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+	// we unmarshal our byteValue which contains our
+	// jsonFile's content into 'RecordsStore' which we defined above
+	json.Unmarshal(byteValue, &RecordsStore)
+
 	http.HandleFunc("/html/", HandlerHTML)
 	http.HandleFunc("/v1/records", HandlerRecords)
 	log.Fatal(http.ListenAndServe(":8080", Log(http.DefaultServeMux)))
