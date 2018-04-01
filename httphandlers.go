@@ -18,7 +18,7 @@ type Record struct {
 // Records defines slice of Record
 type Records []Record
 
-// init main RecordsStore variable
+// RecordsStore main records store
 var RecordsStore Records
 
 // HandlerHTML - handler for /rss/ url
