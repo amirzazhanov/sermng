@@ -1,0 +1,8 @@
+PUT http://localhost:8080/v1/records/1 HTTP/1.1
+
+{
+    "description":"test4444",
+    "counter":10,
+    "url":"http://test4444.com"
+}
+
