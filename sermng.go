@@ -19,6 +19,9 @@ type Page struct {
 	Body  []byte
 }
 
+// JSONFile GLOBAL FILE pointer to main JSON FILE
+var JSONFile *os.File
+
 // Log function
 func Log(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -29,16 +32,17 @@ func Log(handler http.Handler) http.Handler {
 
 func main() {
 	// Open our jsonFile
-	jsonFile, err := os.Open("records.json")
+	var err error
+	JSONFile, err = os.OpenFile("records.json", os.O_RDWR, 0755)
 	// if we os.Open returns an error then handle it
 	if err != nil {
 		log.Println(err)
 	}
 	log.Println("Successfully Opened users.json")
 	// defer the closing of our jsonFile so that we can parse it later on
-	defer jsonFile.Close()
+	defer JSONFile.Close()
 	// read our opened jsonFile as a byte array.
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+	byteValue, _ := ioutil.ReadAll(JSONFile)
 	// we unmarshal our byteValue which contains our
 	// jsonFile's content into 'RecordsStore' which we defined above
 	json.Unmarshal(byteValue, &RecordsStore)

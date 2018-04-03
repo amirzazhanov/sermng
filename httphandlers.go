@@ -41,19 +41,15 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 	// --------------------------------------------------------
 	if r.Method == "POST" {
 		body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576)) // read the body of the request
-
 		log.Println(body)
-
 		if err != nil {
 			log.Fatalln("Error AddRecord", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-
 		if err := r.Body.Close(); err != nil {
 			log.Fatalln("Error AddRecord", err)
 		}
-
 		if err := json.Unmarshal(body, &rec); err != nil { // unmarshall body contents
 			w.WriteHeader(422) // unprocessable entity
 			log.Println(err)
@@ -63,7 +59,6 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
-
 		log.Println(rec)
 		for _, recstor := range RecordsStore { // autoincrement ID
 			if recstor.ID >= rec.ID {
@@ -71,13 +66,18 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		RecordsStore = append(RecordsStore, rec)
-		//		success := c.Repository.AddProduct(rec) // adds the product to the DB
-		//		if !success {
-		//			w.WriteHeader(http.StatusInternalServerError)
-		//			return
-		//		}
-
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
+		if err != nil {
+			log.Fatalln("Error AddRecord unmarshalling data", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
+			log.Println("JSONFFile write:", err)
+		} else {
+			log.Println("==>>> data writen")
+		}
+		//		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(http.StatusCreated)
 		return
 		// -------------------------------------------------------
@@ -85,21 +85,18 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 		// -------------------------------------------------------
 	} else if r.Method == "PUT" {
 		id := getID(r, 0)
+		var putSuccess bool
 		log.Println("PUT id =", id)
 		body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576)) // read the body of the request
-
 		log.Println(body)
-
 		if err != nil {
 			log.Fatalln("Error Change Record", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-
 		if err := r.Body.Close(); err != nil {
 			log.Fatalln("Error Change Record", err)
 		}
-
 		if err := json.Unmarshal(body, &rec); err != nil { // unmarshall body contents
 			w.WriteHeader(422) // unprocessable entity
 			log.Println(err)
@@ -109,14 +106,41 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
-		rec.ID = id
 		log.Println(rec)
+		for i := range RecordsStore { // change Record
+			if RecordsStore[i].ID == id {
+				RecordsStore[i].Description = rec.Description
+				RecordsStore[i].Counter = rec.Counter
+				RecordsStore[i].URL = rec.URL
+				putSuccess = true
+				break
+			}
+		}
+		if putSuccess {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		w.WriteHeader(http.StatusNotFound)
+		return
 		// ----------------------------------------------------------
 		// --------------------- DELETE HANDLER ---------------------
 		// ----------------------------------------------------------
 	} else if r.Method == "DELETE" {
+		var deleteSuccess bool // need to remove this var, but not now
 		id := getID(r, 0)
-		log.Println("DELETE id =", id)
+		for i := range RecordsStore { // delete Record
+			if RecordsStore[i].ID == id {
+				RecordsStore = append(RecordsStore[:i], RecordsStore[i+1:]...)
+				deleteSuccess = true
+				break
+			}
+		}
+		if deleteSuccess {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		w.WriteHeader(http.StatusNotFound)
+		return
 		// -------------------------------------------------------
 		// --------------------- GET HANDLER ---------------------
 		// -------------------------------------------------------
