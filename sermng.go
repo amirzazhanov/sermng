@@ -46,7 +46,7 @@ func main() {
 	// we unmarshal our byteValue which contains our
 	// jsonFile's content into 'RecordsStore' which we defined above
 	json.Unmarshal(byteValue, &RecordsStore)
-
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	http.HandleFunc("/html/", HandlerHTML)
 	http.HandleFunc("/v1/records", HandlerRecords)
 	http.HandleFunc("/v1/records/", HandlerRecords)

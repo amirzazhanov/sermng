@@ -29,7 +29,7 @@ var RecordsStore Records
 // HandlerHTML - handler for /rss/ url
 func HandlerHTML(w http.ResponseWriter, r *http.Request) {
 	pTmp := &Page{Title: "TestPage", Body: []byte("This is a sample simple Page.")}
-	t, _ := template.ParseFiles("template.tpl", "bootstrap4_css.tpl")
+	t, _ := template.ParseFiles("template.tpl")
 	t.Execute(w, pTmp)
 }
 
@@ -68,7 +68,7 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 		RecordsStore = append(RecordsStore, rec)
 		binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
 		if err != nil {
-			log.Fatalln("Error AddRecord unmarshalling data", err)
+			log.Fatalln("Error AddRecord marshalling data", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -117,6 +117,17 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		if putSuccess {
+			binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
+			if err != nil {
+				log.Fatalln("Error Change Record marshalling data", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
+				log.Println("JSONFFile write:", err)
+			} else {
+				log.Println("==>>> data writen")
+			}
 			w.WriteHeader(http.StatusOK)
 			return
 		}
@@ -136,6 +147,17 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		if deleteSuccess {
+			binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
+			if err != nil {
+				log.Fatalln("Error Delete Record marshalling data", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
+				log.Println("JSONFFile write:", err)
+			} else {
+				log.Println("==>>> data writen")
+			}
 			w.WriteHeader(http.StatusOK)
 			return
 		}
