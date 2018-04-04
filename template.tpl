@@ -36,13 +36,13 @@
                         <td>Description</td>
                         <td>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+                                <button type="button" class="btn btn-default">-</button>
                                 <button type="button" class="btn btn-info counter">5<small>(10)</small></button>
-                                <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+                                <button type="button" class="btn btn-default">+</button>
                             </div>
                         </td>
                         <td><img src="/static/image.jpeg" class="img-responsive" alt="Rutracker"></td>
-                        <td><a href="http://link1.com/123/456"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-play"></span></button></a></td>
+                        <td><a href="http://link1.com/123/456"><button type="button" class="btn btn-default">&gt;</button></a></td>
                     </tr>
                     </tbody>
                 </table>
