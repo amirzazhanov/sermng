@@ -98,7 +98,7 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 			log.Fatalln("Error Change Record", err)
 		}
 		if err := json.Unmarshal(body, &rec); err != nil { // unmarshall body contents
-			w.WriteHeader(422) // unprocessable entity
+			w.WriteHeader(http.StatusBadRequest)
 			log.Println(err)
 			if err := json.NewEncoder(w).Encode(err); err != nil {
 				log.Fatalln("Error Change Record unmarshalling data", err)
