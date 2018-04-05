@@ -13,8 +13,8 @@
 <p>[<a href="/edit/{{.Title}}">edit</a>]</p>
 
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-1">
+        <div class="row justify-content-md-center">
+            <div class="col-12 col-md-8">
                 <div class="page-header">
                     <h1>List of <small>something</small></h1>
                 </div>
@@ -25,6 +25,7 @@
 			}
 		</script>
 		<a href="javascript:void(0);" onclick="openallurls()" class="btn btn-primary">Open all links</a>
+        <div id="records_content"></div>
                 <table class="table table-hover table-condensed">
                     <thead>
                     <tr>
@@ -35,18 +36,25 @@
                     <tr>
                         <td>Description</td>
                         <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default">-</button>
-                                <button type="button" class="btn btn-info counter">5<small>(10)</small></button>
-                                <button type="button" class="btn btn-default">+</button>
+                            <div class="btn-group" role="group" aria-label="Count manager">
+                                <button type="button" class="btn btn-secondary">-</button>
+                                <button type="button" class="btn btn-primary counter">5<small>(10)</small></button>
+                                <button type="button" class="btn btn-secondary">+</button>
                             </div>
                         </td>
                         <td><img src="/static/image.jpeg" class="img-responsive" alt="Rutracker"></td>
-                        <td><a href="http://link1.com/123/456"><button type="button" class="btn btn-default">&gt;</button></a></td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="actions">
+                                <a href="http://link1.com/123/456" class="btn btn-primary">&gt;</a>
+                                <button type="button" class="btn btn-primary">E</button>
+                                <button type="button" class="btn btn-primary">D</button>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
 		<a href="javascript:void(0);" onclick="openallurls()" class="btn btn-primary">Open all links</a>
+        <input type="button" class="btn btn-primary" onclick="CreateTableFromJSON()" value="Create Table From JSON" />
             </div>
         </div>
     </div>
@@ -55,5 +63,6 @@
     <script src="/static/jquery-3.2.1.slim.min.js"></script>
     <script src="/static/popper.min.js"></script>
     <script src="/static/bootstrap.min.js"></script>
+    <script src="/static/sermng.js"></script>
 </body>
 </html>
