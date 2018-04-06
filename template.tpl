@@ -60,7 +60,7 @@
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="/static/jquery-3.2.1.slim.min.js"></script>
+    <script src="/static/jquery-3.3.1.min.js"></script>
     <script src="/static/popper.min.js"></script>
     <script src="/static/bootstrap.min.js"></script>
     <script src="/static/sermng.js"></script>
