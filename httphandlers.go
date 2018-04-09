@@ -3,7 +3,6 @@ package main
 
 import (
 	"encoding/json"
-	"html/template"
 	"io"
 	"io/ioutil"
 	"log"
@@ -25,13 +24,6 @@ type Records []Record
 
 // RecordsStore main records store
 var RecordsStore Records
-
-// HandlerHTML - handler for /rss/ url
-func HandlerHTML(w http.ResponseWriter, r *http.Request) {
-	pTmp := &Page{Title: "TestPage", Body: []byte("This is a sample simple Page.")}
-	t, _ := template.ParseFiles("template.tpl")
-	t.Execute(w, pTmp)
-}
 
 // HandlerRecords ...
 func HandlerRecords(w http.ResponseWriter, r *http.Request) {

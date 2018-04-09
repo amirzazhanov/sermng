@@ -13,12 +13,6 @@ import (
 	"os"
 )
 
-// Page structure simple
-type Page struct {
-	Title string
-	Body  []byte
-}
-
 // JSONFile GLOBAL FILE pointer to main JSON FILE
 var JSONFile *os.File
 
@@ -47,7 +41,6 @@ func main() {
 	// jsonFile's content into 'RecordsStore' which we defined above
 	json.Unmarshal(byteValue, &RecordsStore)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
-	http.HandleFunc("/html/", HandlerHTML)
 	http.HandleFunc("/v1/records", HandlerRecords)
 	http.HandleFunc("/v1/records/", HandlerRecords)
 	log.Fatal(http.ListenAndServe(":8080", Log(http.DefaultServeMux)))
