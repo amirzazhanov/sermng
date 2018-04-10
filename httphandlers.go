@@ -43,13 +43,13 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 			log.Fatalln("Error AddRecord", err)
 		}
 		if err := json.Unmarshal(body, &rec); err != nil { // unmarshall body contents
-			w.WriteHeader(422) // unprocessable entity
+			w.WriteHeader(http.StatusInternalServerError)
 			log.Println(err)
 			if err := json.NewEncoder(w).Encode(err); err != nil {
 				log.Fatalln("Error AddRecord unmarshalling data", err)
-				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
+			return
 		}
 		log.Println(rec)
 		for _, recstor := range RecordsStore { // autoincrement ID
