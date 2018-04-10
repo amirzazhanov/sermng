@@ -45,3 +45,7 @@
                 }
             });
         }
+        $(document).ready(function () {
+            // READ recods on page load
+            displayRecords(); // calling function
+        });

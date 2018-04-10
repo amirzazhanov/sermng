@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/open-iconic-bootstrap.css">
   <title>List of things</title>
 </head>
-<body>
+<body onload="displayRecords()">
     <div class="container-fluid">
         <div class="row justify-content-md-center">
             <div class="col-12 col-md-8">
@@ -21,7 +21,7 @@
                 window.open("http://link2.com/123/456", "http://link2.com/123/456")
 			}
 		</script>
-		<a href="javascript:void(0);" onclick="openallurls()" class="btn btn-primary">Open all links</a>
+		<a href="javascript:void(0);" onclick="openallurls()" class="btn btn-primary">Open all links</a> <button class="btn btn-success" data-toggle="modal" data-target="#add_new_record_modal">Add New Record</button>
         <div id="records_content"></div>
                 <table class="table table-hover table-condensed">
                     <thead>
@@ -55,6 +55,81 @@
             </div>
         </div>
     </div>
+    <!-- Bootstrap Modals -->
+<!-- Modal - Add New Record -->
+<div class="modal fade" id="add_new_record_modal" tabindex="-1" role="dialog" aria-labelledby="addRecord">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addRecord">Add New Record</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="record_description">Description</label>
+                    <input type="text" id="record_description" placeholder="Description" class="form-control"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="record_counter">Counter</label>
+                    <input type="text" id="record_counter" placeholder="Counter" class="form-control"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="record_url">URL</label>
+                    <input type="text" id="record_url" placeholder="URL" class="form-control"/>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="addRecord()">Add Record</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- // Modal -->
+
+<!-- Modal - Update User details -->
+<div class="modal fade" id="update_record_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Update</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="update_record_description">Description</label>
+                    <input type="text" id="update_record_description" placeholder="Description" class="form-control"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="update_record_counter">Counter</label>
+                    <input type="text" id="update_record_counter" placeholder="Counter" class="form-control"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="update_record_url">URL</label>
+                    <input type="text" id="update_record_url" placeholder="URL" class="form-control"/>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="updateRecordDetails()" >Save Changes</button>
+                <input type="hidden" id="hidden_record_id">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- // Modal -->
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="js/jquery-3.3.1.min.js"></script>
