@@ -16,9 +16,9 @@ function displayRecords() {
                 tabCellDescr.innerHTML = myJson[i]['description'];
                 var tabCellCounter = tr.insertCell(-1);
                 tabCellCounter.innerHTML =  '<div class="btn-group" role="group" aria-label="Count manager">'+
-                                            '<button type="button" class="btn btn-secondary"><span class="oi oi-minus"></span></button>' +
+                                            '<button type="button" class="btn btn-secondary" onclick="editRecordCounter(' + myJson[i]['id'] + ', ' + ( myJson[i]['counter'] - 1 ) + ')"><span class="oi oi-minus"></span></button>' +
                                             '<button type="button" class="btn btn-primary counter">' + myJson[i]['counter'] + '</button>' +
-                                            '<button type="button" class="btn btn-secondary"><span class="oi oi-plus"></span></button>' +
+                                            '<button type="button" class="btn btn-secondary" onclick="editRecordCounter(' + myJson[i]['id'] + ', ' + ( myJson[i]['counter'] + 1 ) + ')"><span class="oi oi-plus"></span></button>' +
                                             '</div>';
                 var tabCellAct = tr.insertCell(-1);
                 tabCellAct.innerHTML =      '<div class="btn-group" role="group" aria-label="actions">' +
@@ -40,7 +40,7 @@ function deleteRecord(id) {
     jQuery.ajax( {
         url: 'http://localhost:8080/v1/records/' + id,
         type: 'DELETE',
-        success: function(result) {
+        complete: function(result) {
             displayRecords();
         }
     });
@@ -57,7 +57,25 @@ function addRecord() {
         }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function(result) {
+        complete: function(result) {
+            displayRecords();
+        },
+        failure: function(errMsg) {
+            alert(errMsg);
+        }
+    });    
+}
+function editRecordCounter(id, counterVal) {
+    jQuery.ajax({
+        type: "PUT",
+        url: "http://localhost:8080/v1/records/" + id,
+        // The key needs to match your method's input parameter (case-sensitive).
+        data: JSON.stringify({
+            "counter": counterVal
+        }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        complete: function(result) {
             displayRecords();
         },
         failure: function(errMsg) {

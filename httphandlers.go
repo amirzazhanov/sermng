@@ -14,9 +14,9 @@ import (
 // Record structure
 type Record struct {
 	ID          uint32 `json:"id,omitempty"`
-	Description string `json:"description"`
-	Counter     uint32 `json:"counter"`
-	URL         string `json:"url"`
+	Description string `json:"description,omitempty"`
+	Counter     uint32 `json:"counter,omitempty"`
+	URL         string `json:"url,omitempty"`
 }
 
 // Records defines slice of Record
@@ -99,11 +99,18 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		log.Println(rec)
+		log.Println("New Description:", rec.Description)
+		log.Println("New Counter:", rec.Counter)
+		log.Println("New URL:", rec.URL)
 		for i := range RecordsStore { // change Record
 			if RecordsStore[i].ID == id {
-				RecordsStore[i].Description = rec.Description
+				if len(rec.Description) > 0 {
+					RecordsStore[i].Description = rec.Description
+				}
 				RecordsStore[i].Counter = rec.Counter
-				RecordsStore[i].URL = rec.URL
+				if len(rec.URL) > 0 {
+					RecordsStore[i].URL = rec.URL
+				}
 				putSuccess = true
 				break
 			}

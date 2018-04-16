@@ -1,0 +1,6 @@
+PUT http://localhost:8080/v1/records/9 HTTP/1.1
+
+{
+    "counter":555
+}
+
