@@ -1,6 +1,6 @@
 # sermng
-- manage single table JSON database with web app and REST API
-- do not use 3rd party http router (Just for fun)
+1. manage single table JSON database with web app and REST API
+2. do not use 3rd party http router (Just for fun)
 
 ## JSON FORMAT
 id,description,counter,url
