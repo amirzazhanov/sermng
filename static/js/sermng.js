@@ -6,6 +6,10 @@ function displayRecords() {
         contentType: 'application/json; charset=utf-8',
         success: function( response ) {
             myJson = response;
+            // CREATE SCRIPT
+            var script = document.createElement("script");
+            script.setAttribute('type', 'text/javascript');
+            script.innerHTML = '			function openallurls() {\n';
             // CREATE DYNAMIC TABLE.
             var table = document.createElement("table");
             table.setAttribute('class', 'table table-hover table-condensed');
@@ -26,12 +30,13 @@ function displayRecords() {
                                             '<button type="button" class="btn btn-primary" onclick="editRecord(' + myJson[i]['id'] + ')"><span class="oi oi-pencil"></span></button>' +
                                             '<button type="button" class="btn btn-primary" onclick="deleteRecord(' + myJson[i]['id'] + ')"><span class="oi oi-trash"></span></button>' +
                                             '</div>';
-                                            
+                script.innerHTML = script.innerHTML + 'window.open("' + myJson[i]['url'] + '", "' + myJson[i]['url'] + '");\n';
             }
-        
+            script.innerHTML = script.innerHTML + '}\n';
             // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
             var divContainer = document.getElementById("records_content");
             divContainer.innerHTML = "";
+            divContainer.appendChild(script);
             divContainer.appendChild(table);
             }
     } );

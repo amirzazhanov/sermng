@@ -1,44 +1,44 @@
 [
   {
     "id": 1,
-    "description": "test123",
+    "description": "CNN",
     "counter": 16,
-    "url": "http://test123.com"
+    "url": "http://cnn.com"
   },
   {
     "id": 2,
-    "description": "test456",
+    "description": "Lenta",
     "counter": 27,
-    "url": "http://test456.com"
+    "url": "https://lenta.ru/"
   },
   {
     "id": 3,
-    "description": "test789",
+    "description": "TASS",
     "counter": 38,
-    "url": "http://test789.com"
+    "url": "http://tass.ru/"
   },
   {
     "id": 4,
-    "description": "test4444",
+    "description": "FOXNEWS",
     "counter": 11,
-    "url": "http://test4444.com"
+    "url": "http://www.foxnews.com/"
   },
   {
     "id": 9,
-    "description": "test_test_test",
+    "description": "SKY NEWS",
     "counter": 539,
-    "url": "http://test_test_test.com"
+    "url": "https://news.sky.com/"
   },
   {
     "id": 10,
-    "description": "qwertyuiop",
+    "description": "RIA",
     "counter": 2,
-    "url": "http://1234567.com"
+    "url": "https://ria.ru/"
   },
   {
     "id": 11,
     "description": "test123",
-    "counter": 4,
+    "counter": 5,
     "url": "http://ppp.lov.com"
   }
 ]

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/open-iconic-bootstrap.css">
+    <style>.counter { width: 100px !important; }</style>
   <title>List of things</title>
 </head>
 <body onload="displayRecords()">
@@ -15,11 +16,6 @@
                 <div class="page-header">
                     <h1>List of things <small>v0.1</small></h1>
                 </div>
- 		<script type="text/javascript">
-			function openallurls() {
-                window.open("http://link1.com/123/456", "http://link1.com/123/456")
-                window.open("http://link2.com/123/456", "http://link2.com/123/456")
-			}
 		</script>
 		<a href="javascript:void(0);" onclick="openallurls()" class="btn btn-primary">Open all links</a> <button class="btn btn-success" data-toggle="modal" data-target="#add_new_record_modal">Add New Record</button>
         <div id="records_content"></div>
