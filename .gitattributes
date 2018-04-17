@@ -1,0 +1,4 @@
+static/css/* linguist-vendored
+static/fonts/* linguist-vendored
+static/js/* linguist-vendored
+sermng.js linguist-vendored=false
