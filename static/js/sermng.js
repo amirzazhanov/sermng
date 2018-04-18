@@ -19,16 +19,18 @@ function displayRecords() {
                 var tabCellDescr = tr.insertCell(-1);
                 tabCellDescr.innerHTML = myJson[i]['description'];
                 var tabCellCounter = tr.insertCell(-1);
+                tabCellCounter.setAttribute('align', 'right');
                 tabCellCounter.innerHTML =  '<div class="btn-group" role="group" aria-label="Count manager">'+
-                                            '<button type="button" class="btn btn-secondary" onclick="editRecordCounter(' + myJson[i]['id'] + ', ' + ( myJson[i]['counter'] - 1 ) + ')"><span class="oi oi-minus"></span></button>' +
+                                            '<button type="button" class="btn btn-secondary" onclick="editRecordCounter(' + myJson[i]['id'] + ', ' + ( myJson[i]['counter'] - 1 ) + ')" title="-1"><span class="oi oi-minus"></span></button>' +
                                             '<button type="button" class="btn btn-primary counter">' + myJson[i]['counter'] + '</button>' +
-                                            '<button type="button" class="btn btn-secondary" onclick="editRecordCounter(' + myJson[i]['id'] + ', ' + ( myJson[i]['counter'] + 1 ) + ')"><span class="oi oi-plus"></span></button>' +
+                                            '<button type="button" class="btn btn-secondary" onclick="editRecordCounter(' + myJson[i]['id'] + ', ' + ( myJson[i]['counter'] + 1 ) + ')" title="+1"><span class="oi oi-plus"></span></button>' +
                                             '</div>';
                 var tabCellAct = tr.insertCell(-1);
+                tabCellAct.setAttribute('align', 'right');
                 tabCellAct.innerHTML =      '<div class="btn-group" role="group" aria-label="actions">' +
-                                            '<a href="' + myJson[i]['url'] + '" class="btn btn-primary"><span class="oi oi-media-play"></span></a>'+
-                                            '<button type="button" class="btn btn-primary" onclick="editRecord(' + myJson[i]['id'] + ')"><span class="oi oi-pencil"></span></button>' +
-                                            '<button type="button" class="btn btn-primary" onclick="deleteRecord(' + myJson[i]['id'] + ')"><span class="oi oi-trash"></span></button>' +
+                                            '<a href="' + myJson[i]['url'] + '" class="btn btn-primary"><span class="oi oi-external-link"></span></a>'+
+                                            '<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#update_record_modal" onclick="editRecord(' + myJson[i]['id'] + ')" title="Edit"><span class="oi oi-pencil"></span></button>' +
+                                            '<button type="button" class="btn btn-primary" onclick="deleteRecord(' + myJson[i]['id'] + ')" title="Delete"><span class="oi oi-trash"></span></button>' +
                                             '</div>';
                 script.innerHTML = script.innerHTML + 'window.open("' + myJson[i]['url'] + '", "' + myJson[i]['url'] + '");\n';
             }

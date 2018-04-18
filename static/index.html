@@ -1,30 +1,36 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
+    <link rel="icon" type="image/png" href="image/boxes.png">
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/open-iconic-bootstrap.css">
     <style>.counter { width: 100px !important; }</style>
-  <title>List of things</title>
+    <title>List of things</title>
 </head>
 <body onload="displayRecords()">
     <div class="container-fluid">
         <div class="row justify-content-md-center">
             <div class="col-12 col-md-8">
-                <div class="page-header">
-                    <h1>List of things <small>v0.1</small></h1>
+                <nav class="navbar navbar-light bg-light justify-content-between">
+                <a class="navbar-brand mb-0 h1"><img src="image/boxes.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+                    List of things <small>v0.1</small>
+                </a>
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar">
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        <button class="btn btn-primary" onclick="openallurls()" class="btn btn-primary" title="Open all links"><span class="oi oi-chevron-right"></span><span class="oi oi-chevron-right"></span></button>
+                        <button class="btn btn-primary" onclick="displayRecords()" class="btn btn-primary" title="Refresh"><span class="oi oi-reload"></span></button>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#add_new_record_modal" title="Add new record"><span class="oi oi-document"></span></button>
+                    </div>
                 </div>
-		</script>
-		<a href="javascript:void(0);" onclick="openallurls()" class="btn btn-primary">Open all links</a> <button class="btn btn-success" data-toggle="modal" data-target="#add_new_record_modal">Add New Record</button>
-        <div id="records_content"></div>
-		<a href="javascript:void(0);" onclick="openallurls()" class="btn btn-primary">Open all links</a>
-        <input type="button" class="btn btn-primary" onclick="displayRecords()" value="Create Table From JSON" />
+                </nav>
+                <div id="records_content"></div>
             </div>
         </div>
     </div>
-    <!-- Bootstrap Modals -->
+<!-- Bootstrap Modals -->
 <!-- Modal - Add New Record -->
 <div class="modal fade" id="add_new_record_modal" tabindex="-1" role="dialog" aria-labelledby="addRecord">
     <div class="modal-dialog" role="document">
