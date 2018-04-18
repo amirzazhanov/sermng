@@ -17,11 +17,11 @@ id,description,counter,url
 * PUT http://example.com/v1/records/{record_id} - record update (for now: counter update)
 * DELETE http://example.com/v1/records/{record_id} - delete record
 
-##TODO
-1. [ ] full support of edit record (HTML/JS FE)
-2. [ ] add configuration options for server (command line and config file)
-  * [ ] HTML/JS FE directory root
-  * [ ] REST API port
-  * [ ] JSON file location
-2. [ ] add JWT authentication to REST API (GO/REST BE + HTML/JS FE)
-3. [ ] add support for multiuser (GO/REST BE + HTML/JS FE)
+## TODO
+- [ ] full support of edit record (HTML/JS FE)
+- [ ] add configuration options for server (command line and config file)
+  - [ ] \(config options) HTML/JS FE directory root
+  - [ ] \(config options) REST API port
+  - [ ] \(config options) JSON file location
+- [ ] add JWT authentication to REST API (GO/REST BE + HTML/JS FE)
+- [ ] add support for multiuser (GO/REST BE + HTML/JS FE)
