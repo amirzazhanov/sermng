@@ -18,7 +18,7 @@ id,description,counter,url
 * DELETE http://example.com/v1/records/{record_id} - delete record
 
 ##TODO
-1.[ ] full support of edit record (HTML/JS FE)
+1. [ ] full support of edit record (HTML/JS FE)
 2. [ ] add configuration options for server (command line and config file)
   * [ ] HTML/JS FE directory root
   * [ ] REST API port
