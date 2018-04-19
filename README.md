@@ -19,7 +19,7 @@ id,description,counter,url
 
 ## TODO
 - [ ] full support of edit record (HTML/JS FE + GO/REST BE)
-  - [ ] add support for "GET single record" to REST API
+  - [x] add support for "GET single record" to REST API
   - [ ] edit record support in HTML/JS FE
 - [ ] add configuration options for server (command line and config file)
   - [ ] \(config option) HTML/JS FE directory root
