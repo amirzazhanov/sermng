@@ -166,10 +166,24 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 		// --------------------- GET HANDLER ---------------------
 		// -------------------------------------------------------
 	} else if r.Method == "GET" {
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
-		if err := json.NewEncoder(w).Encode(RecordsStore); err != nil {
-			panic(err)
+		id := getID(r, 0) // get record id
+		if id == 0 {
+			w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+			w.WriteHeader(http.StatusOK)
+			if err := json.NewEncoder(w).Encode(RecordsStore); err != nil {
+				panic(err)
+			}
+		} else {
+			w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+			w.WriteHeader(http.StatusOK)
+			for i := range RecordsStore { // change Record
+				if RecordsStore[i].ID == id {
+					if err := json.NewEncoder(w).Encode(RecordsStore[i]); err != nil {
+						panic(err)
+					}
+					break
+				}
+			}
 		}
 	} else {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
