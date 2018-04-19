@@ -18,10 +18,12 @@ id,description,counter,url
 * DELETE http://example.com/v1/records/{record_id} - delete record
 
 ## TODO
-- [ ] full support of edit record (HTML/JS FE)
+- [ ] full support of edit record (HTML/JS FE + GO/REST BE)
+  - [ ] add support for "GET single record" to REST API
+  - [ ] edit record support in HTML/JS FE
 - [ ] add configuration options for server (command line and config file)
-  - [ ] \(config options) HTML/JS FE directory root
-  - [ ] \(config options) REST API port
-  - [ ] \(config options) JSON file location
+  - [ ] \(config option) HTML/JS FE directory root
+  - [ ] \(config option) REST API port
+  - [ ] \(config option) JSON file location
 - [ ] add JWT authentication to REST API (GO/REST BE + HTML/JS FE)
 - [ ] add support for multiuser (GO/REST BE + HTML/JS FE)
