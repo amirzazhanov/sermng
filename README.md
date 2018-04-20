@@ -18,9 +18,9 @@ id,description,counter,url
 * DELETE http://example.com/v1/records/{record_id} - delete record
 
 ## TODO
-- [ ] full support of edit record (HTML/JS FE + GO/REST BE)
+- [x] full support of edit record (HTML/JS FE + GO/REST BE)
   - [x] add support for "GET single record" to REST API
-  - [ ] edit record support in HTML/JS FE
+  - [x] edit record support in HTML/JS FE
 - [ ] add configuration options for server (command line and config file)
   - [ ] \(config option) HTML/JS FE directory root
   - [ ] \(config option) REST API port

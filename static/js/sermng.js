@@ -29,7 +29,7 @@ function displayRecords() {
                 tabCellAct.setAttribute('align', 'right');
                 tabCellAct.innerHTML =      '<div class="btn-group" role="group" aria-label="actions">' +
                                             '<a href="' + myJson[i]['url'] + '" class="btn btn-primary"><span class="oi oi-external-link"></span></a>'+
-                                            '<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#update_record_modal" onclick="editRecord(' + myJson[i]['id'] + ')" title="Edit"><span class="oi oi-pencil"></span></button>' +
+                                            '<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#update_record_modal" onclick="startEditRecord(' + myJson[i]['id'] + ')" title="Edit"><span class="oi oi-pencil"></span></button>' +
                                             '<button type="button" class="btn btn-primary" onclick="deleteRecord(' + myJson[i]['id'] + ')" title="Delete"><span class="oi oi-trash"></span></button>' +
                                             '</div>';
                 script.innerHTML = script.innerHTML + 'window.open("' + myJson[i]['url'] + '", "' + myJson[i]['url'] + '");\n';
@@ -51,6 +51,43 @@ function deleteRecord(id) {
             displayRecords();
         }
     });
+}
+function startEditRecord(id) {
+    jQuery.ajax( {
+        url: 'http://localhost:8080/v1/records/' + id,
+        type: 'GET',
+        contentType: 'application/json; charset=utf-8',
+        success: function(response) {
+            myJson = response;
+            document.getElementById('update_record_description').value = myJson['description'];
+            document.getElementById('update_record_counter').value = myJson['counter'];
+            document.getElementById('update_record_url').value = myJson['url'];
+            document.getElementById('hidden_record_id').value = id;
+        },
+        failure: function(errMsg) {
+            alert(errMsg);
+        }
+    });
+}
+function updateRecordDetails() {
+    jQuery.ajax({
+        type: "PUT",
+        url: "http://localhost:8080/v1/records/" + $('#hidden_record_id').val(),
+        // The key needs to match your method's input parameter (case-sensitive).
+        data: JSON.stringify({
+            "description": $('#update_record_description').val(),
+            "counter": parseInt($('#update_record_counter').val(), 10),
+            "url": $('#update_record_url').val()
+        }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        complete: function(result) {
+            displayRecords();
+        },
+        failure: function(errMsg) {
+            alert(errMsg);
+        }
+    });    
 }
 function addRecord() {
     jQuery.ajax({
