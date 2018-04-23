@@ -1,8 +1,0 @@
-PUT http://localhost:8080/v1/records/1 HTTP/1.1
-
-{
-    "description":"new test value",
-    "counter":22,
-    "url":"http://new_test_value.com"
-}
-

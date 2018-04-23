@@ -1,2 +1,0 @@
-GET http://localhost:8080/v1/records/2 HTTP/1.1
-
