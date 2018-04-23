@@ -22,7 +22,7 @@ id,description,counter,url
   - [x] add support for "GET single record" to REST API
   - [x] edit record support in HTML/JS FE
 - [ ] add configuration options for server and client (command line and config file)
-  - [ ] GO/REST BE
+  - [ ] GO/REST BE (use JSON as config file format)
     - [ ] \(config option) HTML/JS FE directory root
     - [ ] \(config option) REST API port
     - [ ] \(config option) JSON file location
