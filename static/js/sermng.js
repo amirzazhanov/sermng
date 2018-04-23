@@ -1,7 +1,14 @@
+var CONFIG = {
+    "apiProtocol": "http",
+    "apiPort": 8080,
+    "apiHost": "localhost",
+    "apiKey": "not_implemented"
+    };
 function displayRecords() {
     var myJson;
     jQuery.ajax( {
-        url: 'http://localhost:8080/v1/records',
+//        url: 'http://localhost:8080/v1/records',
+        url: CONFIG.apiProtocol + '://' + CONFIG.apiHost + ':' + CONFIG.apiPort + '/v1/records',
         type: 'GET',
         contentType: 'application/json; charset=utf-8',
         success: function( response ) {
@@ -45,7 +52,7 @@ function displayRecords() {
 }
 function deleteRecord(id) {
     jQuery.ajax( {
-        url: 'http://localhost:8080/v1/records/' + id,
+        url: CONFIG.apiProtocol + '://' + CONFIG.apiHost + ':' + CONFIG.apiPort + '/v1/records/' + id,
         type: 'DELETE',
         complete: function(result) {
             displayRecords();
@@ -54,7 +61,7 @@ function deleteRecord(id) {
 }
 function startEditRecord(id) {
     jQuery.ajax( {
-        url: 'http://localhost:8080/v1/records/' + id,
+        url: CONFIG.apiProtocol + '://' + CONFIG.apiHost + ':' + CONFIG.apiPort + '/v1/records/' + id,
         type: 'GET',
         contentType: 'application/json; charset=utf-8',
         success: function(response) {
@@ -71,16 +78,16 @@ function startEditRecord(id) {
 }
 function updateRecordDetails() {
     jQuery.ajax({
-        type: "PUT",
-        url: "http://localhost:8080/v1/records/" + $('#hidden_record_id').val(),
+        type: 'PUT',
+        url: CONFIG.apiProtocol + '://' + CONFIG.apiHost + ':' + CONFIG.apiPort + '/v1/records/' + $('#hidden_record_id').val(),
         // The key needs to match your method's input parameter (case-sensitive).
         data: JSON.stringify({
-            "description": $('#update_record_description').val(),
-            "counter": parseInt($('#update_record_counter').val(), 10),
-            "url": $('#update_record_url').val()
+            'description': $('#update_record_description').val(),
+            'counter': parseInt($('#update_record_counter').val(), 10),
+            'url': $('#update_record_url').val()
         }),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
         complete: function(result) {
             displayRecords();
         },
@@ -91,16 +98,16 @@ function updateRecordDetails() {
 }
 function addRecord() {
     jQuery.ajax({
-        type: "POST",
-        url: "http://localhost:8080/v1/records",
+        type: 'POST',
+        url: CONFIG.apiProtocol + '://' + CONFIG.apiHost + ':' + CONFIG.apiPort + '/v1/records',
         // The key needs to match your method's input parameter (case-sensitive).
         data: JSON.stringify({
-            "description": $('#record_description').val(),
-            "counter": parseInt($('#record_counter').val(), 10),
-            "url": $('#record_url').val()
+            'description': $('#record_description').val(),
+            'counter': parseInt($('#record_counter').val(), 10),
+            'url': $('#record_url').val()
         }),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
         complete: function(result) {
             displayRecords();
         },
@@ -112,13 +119,13 @@ function addRecord() {
 function editRecordCounter(id, counterVal) {
     jQuery.ajax({
         type: "PUT",
-        url: "http://localhost:8080/v1/records/" + id,
+        url: CONFIG.apiProtocol + '://' + CONFIG.apiHost + ':' + CONFIG.apiPort + '/v1/records/' + id,
         // The key needs to match your method's input parameter (case-sensitive).
         data: JSON.stringify({
-            "counter": counterVal
+            'counter': counterVal
         }),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
         complete: function(result) {
             displayRecords();
         },
