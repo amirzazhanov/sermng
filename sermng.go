@@ -16,6 +16,21 @@ import (
 // JSONFile GLOBAL FILE pointer to main JSON FILE
 var JSONFile *os.File
 
+// ConfigFile Global File pounter to configuration file
+var ConfigFile *os.File
+
+// ConfigFileName List of default locations for configuration filenames
+var ConfigFileName = []string{"sermngconfig.json", "/etc/sermngconfig.json", "/usr/local/etc/sermngconfig.json"}
+
+type Conf struct {
+	RestAPIPort        uint32 `json:"restAPIPort,omitempty"`
+	RestAPIBindAddress string `json:"restAPIBindAddress,omitempty"`
+	DataJSONFile       string `json:"dataJSONFile,omitempty"`
+}
+type Configuration []Conf
+
+var CFG Configuration
+
 // Log function
 func Log(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -25,14 +40,32 @@ func Log(handler http.Handler) http.Handler {
 }
 
 func main() {
-	// Open our jsonFile
 	var err error
-	JSONFile, err = os.OpenFile("records.json", os.O_RDWR, 0755)
+	// Open our ConfigFile
+	for _, v := range ConfigFileName {
+		ConfigFile, err = os.Open(v)
+		// if we os.Open returns an error then handle it
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		defer ConfigFile.Close()
+		log.Println("Successfully opened configuration file", v)
+		confByteValue, _ := ioutil.ReadAll(ConfigFile)
+		err := json.Unmarshal(confByteValue, &CFG)
+		if err != nil {
+			log.Println("JSONUnmarshal error:", err)
+		}
+		log.Println("Configuration read from file:", CFG)
+		break
+	}
+	// Open our jsonFile
+	JSONFile, err = os.OpenFile(CFG[0].DataJSONFile, os.O_RDWR, 0755)
 	// if we os.Open returns an error then handle it
 	if err != nil {
 		log.Println(err)
 	}
-	log.Println("Successfully Opened users.json")
+	log.Println("Successfully Opened", CFG[0].DataJSONFile)
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer JSONFile.Close()
 	// read our opened jsonFile as a byte array.

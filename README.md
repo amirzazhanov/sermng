@@ -25,7 +25,7 @@ id,description,counter,url
   - [ ] GO/REST BE (use JSON as config file format)
     - [ ] \(config option) HTML/JS FE directory root
     - [ ] \(config option) REST API port
-    - [ ] \(config option) JSON file location
+    - [+] \(config option) JSON file location
   - [x] HTML/JS FE
 - [ ] add JWT authentication to REST API (GO/REST BE + HTML/JS FE)
 - [ ] add support for multiuser (GO/REST BE + HTML/JS FE)

@@ -1,0 +1,7 @@
+[
+    {
+        "restAPIPort": 8080,
+        "restAPIBindAddress": "0.0.0.0",
+        "dataJSONFile": "records.json"
+    }
+]
