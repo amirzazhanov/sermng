@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 // JSONFile GLOBAL FILE pointer to main JSON FILE
@@ -22,14 +23,15 @@ var ConfigFile *os.File
 // ConfigFileName List of default locations for configuration filenames
 var ConfigFileName = []string{"sermngconfig.json", "/etc/sermngconfig.json", "/usr/local/etc/sermngconfig.json"}
 
+// Conf describes configuration file format
 type Conf struct {
 	RestAPIPort        uint32 `json:"restAPIPort,omitempty"`
 	RestAPIBindAddress string `json:"restAPIBindAddress,omitempty"`
 	DataJSONFile       string `json:"dataJSONFile,omitempty"`
 }
-type Configuration []Conf
 
-var CFG Configuration
+// CFG Configuration to parse
+var CFG []Conf
 
 // Log function
 func Log(handler http.Handler) http.Handler {
@@ -57,6 +59,8 @@ func main() {
 			log.Println("JSONUnmarshal error:", err)
 		}
 		log.Println("Configuration read from file:", CFG)
+		log.Println("Address string:", CFG[0].RestAPIBindAddress+":"+strconv.FormatUint(uint64(CFG[0].RestAPIPort), 10))
+		log.Println("JSON data file location:", CFG[0].DataJSONFile)
 		break
 	}
 	// Open our jsonFile
@@ -76,5 +80,5 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	http.HandleFunc("/v1/records", HandlerRecords)
 	http.HandleFunc("/v1/records/", HandlerRecords)
-	log.Fatal(http.ListenAndServe(":8080", Log(http.DefaultServeMux)))
+	log.Fatal(http.ListenAndServe(CFG[0].RestAPIBindAddress+":"+strconv.FormatUint(uint64(CFG[0].RestAPIPort), 10), Log(http.DefaultServeMux)))
 }

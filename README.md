@@ -24,7 +24,8 @@ id,description,counter,url
 - [ ] add configuration options for server and client (command line and config file)
   - [ ] GO/REST BE (use JSON as config file format)
     - [ ] \(config option) HTML/JS FE directory root
-    - [ ] \(config option) REST API port
+    - [x] \(config option) REST API port
+    - [x] \(config option) REST API bind address
     - [x] \(config option) JSON file location
   - [x] HTML/JS FE
 - [ ] add JWT authentication to REST API (GO/REST BE + HTML/JS FE)
