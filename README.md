@@ -21,9 +21,8 @@ id,description,counter,url
 - [x] full support of edit record (HTML/JS FE + GO/REST BE)
   - [x] add support for "GET single record" to REST API
   - [x] edit record support in HTML/JS FE
-- [ ] add configuration options for server and client (command line and config file)
-  - [ ] GO/REST BE (use JSON as config file format)
-    - [ ] \(config option) HTML/JS FE directory root
+- [x] add configuration options for server and client (command line and config file)
+  - [x] GO/REST BE (use JSON as config file format)
     - [x] \(config option) REST API port
     - [x] \(config option) REST API bind address
     - [x] \(config option) JSON file location
