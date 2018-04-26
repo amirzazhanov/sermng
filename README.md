@@ -28,5 +28,5 @@ id,description,counter,url
     - [x] \(config option) JSON file location
   - [x] HTML/JS FE
 - [ ] add JWT authentication to REST API (GO/REST BE + HTML/JS FE)
-  - [ ] learn github.com/dgrijalva/jwt-go (RFC 7519)
+  - [ ] learn github.com/dgrijalva/jwt-go (RFC 7519, 7515, 7516)
 - [ ] add support for multiuser (GO/REST BE + HTML/JS FE)
