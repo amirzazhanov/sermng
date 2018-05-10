@@ -12,6 +12,8 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 // JSONFile GLOBAL FILE pointer to main JSON FILE
@@ -78,7 +80,10 @@ func main() {
 	// jsonFile's content into 'RecordsStore' which we defined above
 	json.Unmarshal(byteValue, &RecordsStore)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
-	http.HandleFunc("/v1/records", HandlerRecords)
-	http.HandleFunc("/v1/records/", HandlerRecords)
+	r := mux.NewRouter().StrictSlash(false)
+	r.HandleFunc("/v1/records", CreateRecord).Methods("POST")
+	r.HandleFunc("/v1/records/{record_id:[0-9]+}", ReadRecord).Methods("GET")
+	r.HandleFunc("/v1/records/{record_id:[0-9]+}", UpdateRecord).Methods("PUT")
+	r.HandleFunc("/v1/records/{record_id:[0-9]+}", DeleteRecord).Methods("DELETE")
 	log.Fatal(http.ListenAndServe(CFG[0].RestAPIBindAddress+":"+strconv.FormatUint(uint64(CFG[0].RestAPIPort), 10), Log(http.DefaultServeMux)))
 }

@@ -25,6 +25,26 @@ type Records []Record
 // RecordsStore main records store
 var RecordsStore Records
 
+// CreateRecord - http handler
+func CreateRecord(w http.ResponseWriter, r *http.Request) {
+	return
+}
+
+// ReadRecord - http handler
+func ReadRecord(w http.ResponseWriter, r *http.Request) {
+	return
+}
+
+// UpdateRecord - http handler
+func UpdateRecord(w http.ResponseWriter, r *http.Request) {
+	return
+}
+
+// DeleteRecord - http handler
+func DeleteRecord(w http.ResponseWriter, r *http.Request) {
+	return
+}
+
 // HandlerRecords ...
 func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 	var rec Record
