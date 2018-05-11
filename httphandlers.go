@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 // Record structure
@@ -32,6 +34,32 @@ func CreateRecord(w http.ResponseWriter, r *http.Request) {
 
 // ReadRecord - http handler
 func ReadRecord(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.ParseUint(vars["record_id"], 10, 32)
+	if err != nil {
+		panic(err)
+	}
+	for i := range RecordsStore {
+		if RecordsStore[i].ID == uint32(id) {
+			w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+			w.WriteHeader(http.StatusOK)
+			if err := json.NewEncoder(w).Encode(RecordsStore[i]); err != nil {
+				panic(err)
+			}
+			return
+		}
+	}
+	w.WriteHeader(http.StatusNotFound)
+	return
+}
+
+// ReadAllRecords - http handler
+func ReadAllRecords(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(RecordsStore); err != nil {
+		panic(err)
+	}
 	return
 }
 
