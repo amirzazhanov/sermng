@@ -109,6 +109,10 @@ function addRecord() {
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         complete: function(result) {
+            document.getElementById('record_description').value = '';
+            document.getElementById('record_counter').value = '';
+            document.getElementById('record_url').value = '';
+            
             displayRecords();
         },
         failure: function(errMsg) {

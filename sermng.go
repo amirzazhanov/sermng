@@ -7,11 +7,14 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 // JSONFile GLOBAL FILE pointer to main JSON FILE
@@ -43,6 +46,10 @@ func Log(handler http.Handler) http.Handler {
 
 func main() {
 	var err error
+	var dir string
+
+	flag.StringVar(&dir, "dir", "./static", "the directory to serve files from. Defaults to the dir 'static'")
+	flag.Parse()
 	// Open our ConfigFile
 	for _, v := range ConfigFileName {
 		ConfigFile, err = os.Open(v)
@@ -77,8 +84,12 @@ func main() {
 	// we unmarshal our byteValue which contains our
 	// jsonFile's content into 'RecordsStore' which we defined above
 	json.Unmarshal(byteValue, &RecordsStore)
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
-	http.HandleFunc("/v1/records", HandlerRecords)
-	http.HandleFunc("/v1/records/", HandlerRecords)
-	log.Fatal(http.ListenAndServe(CFG[0].RestAPIBindAddress+":"+strconv.FormatUint(uint64(CFG[0].RestAPIPort), 10), Log(http.DefaultServeMux)))
+	r := mux.NewRouter()
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(dir))))
+	r.HandleFunc("/v1/records", CreateRecord).Methods("POST")
+	r.HandleFunc("/v1/records/{record_id:[0-9]+}", ReadRecord).Methods("GET")
+	r.HandleFunc("/v1/records", ReadAllRecords).Methods("GET")
+	r.HandleFunc("/v1/records/{record_id:[0-9]+}", UpdateRecord).Methods("PUT")
+	r.HandleFunc("/v1/records/{record_id:[0-9]+}", DeleteRecord).Methods("DELETE")
+	log.Fatal(http.ListenAndServe(CFG[0].RestAPIBindAddress+":"+strconv.FormatUint(uint64(CFG[0].RestAPIPort), 10), Log(r)))
 }

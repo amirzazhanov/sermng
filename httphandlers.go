@@ -8,7 +8,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 // Record structure
@@ -25,42 +26,135 @@ type Records []Record
 // RecordsStore main records store
 var RecordsStore Records
 
-// HandlerRecords ...
-func HandlerRecords(w http.ResponseWriter, r *http.Request) {
+// CreateRecord - Create new record in RecordStore
+//=======================================================
+func CreateRecord(w http.ResponseWriter, r *http.Request) {
 	var rec Record
-	// --------------------------------------------------------
-	// --------------------- POST HANDLER ---------------------
-	// --------------------------------------------------------
-	if r.Method == "POST" {
-		body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576)) // read the body of the request
-		log.Println(body)
-		if err != nil {
-			log.Fatalln("Error AddRecord", err)
-			w.WriteHeader(http.StatusInternalServerError)
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576)) // read the body of the request
+	log.Println(body)
+	if err != nil {
+		log.Fatalln("Error AddRecord", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if err := r.Body.Close(); err != nil {
+		log.Fatalln("Error AddRecord", err)
+	}
+	if err := json.Unmarshal(body, &rec); err != nil { // unmarshall body contents
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Println(err)
+		if err := json.NewEncoder(w).Encode(err); err != nil {
+			log.Fatalln("Error AddRecord unmarshalling data", err)
 			return
 		}
-		if err := r.Body.Close(); err != nil {
-			log.Fatalln("Error AddRecord", err)
+		return
+	}
+	log.Println(rec)
+	for _, recstor := range RecordsStore { // autoincrement ID
+		if recstor.ID >= rec.ID {
+			rec.ID = recstor.ID + 1
 		}
-		if err := json.Unmarshal(body, &rec); err != nil { // unmarshall body contents
-			w.WriteHeader(http.StatusInternalServerError)
-			log.Println(err)
-			if err := json.NewEncoder(w).Encode(err); err != nil {
-				log.Fatalln("Error AddRecord unmarshalling data", err)
-				return
+	}
+	RecordsStore = append(RecordsStore, rec)
+	binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
+	if err != nil {
+		log.Fatalln("Error AddRecord marshalling data", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
+		log.Println("JSONFFile write:", err)
+	} else {
+		log.Println("==>>> data writen")
+	}
+	//		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusCreated)
+	return
+}
+
+// ReadRecord - Read specific record from RecordStore
+//=======================================================
+func ReadRecord(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.ParseUint(vars["record_id"], 10, 32)
+	if err != nil {
+		panic(err)
+	}
+	for i := range RecordsStore {
+		if RecordsStore[i].ID == uint32(id) {
+			w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+			w.WriteHeader(http.StatusOK)
+			if err := json.NewEncoder(w).Encode(RecordsStore[i]); err != nil {
+				panic(err)
 			}
 			return
 		}
-		log.Println(rec)
-		for _, recstor := range RecordsStore { // autoincrement ID
-			if recstor.ID >= rec.ID {
-				rec.ID = recstor.ID + 1
-			}
+	}
+	w.WriteHeader(http.StatusNotFound)
+	return
+}
+
+// ReadAllRecords - http handler
+//=======================================================
+func ReadAllRecords(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(RecordsStore); err != nil {
+		panic(err)
+	}
+	return
+}
+
+// UpdateRecord - http handler
+func UpdateRecord(w http.ResponseWriter, r *http.Request) {
+	var putSuccess bool
+	var rec Record
+	vars := mux.Vars(r)
+	id, err := strconv.ParseUint(vars["record_id"], 10, 32)
+	if err != nil {
+		panic(err)
+	}
+	log.Println("PUT id =", id)
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576)) // read the body of the request
+	log.Println(body)
+	if err != nil {
+		log.Fatalln("Error Change Record", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if err := r.Body.Close(); err != nil {
+		log.Fatalln("Error Change Record", err)
+	}
+	if err := json.Unmarshal(body, &rec); err != nil { // unmarshall body contents
+		w.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		if err := json.NewEncoder(w).Encode(err); err != nil {
+			log.Fatalln("Error Change Record unmarshalling data", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
 		}
-		RecordsStore = append(RecordsStore, rec)
+	}
+	log.Println(rec)
+	log.Println("New Description:", rec.Description)
+	log.Println("New Counter:", rec.Counter)
+	log.Println("New URL:", rec.URL)
+	for i := range RecordsStore { // change Record
+		if RecordsStore[i].ID == uint32(id) {
+			if len(rec.Description) > 0 {
+				RecordsStore[i].Description = rec.Description
+			}
+			RecordsStore[i].Counter = rec.Counter
+			if len(rec.URL) > 0 {
+				RecordsStore[i].URL = rec.URL
+			}
+			putSuccess = true
+			break
+		}
+	}
+	if putSuccess {
 		binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
 		if err != nil {
-			log.Fatalln("Error AddRecord marshalling data", err)
+			log.Fatalln("Error Change Record marshalling data", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -69,142 +163,44 @@ func HandlerRecords(w http.ResponseWriter, r *http.Request) {
 		} else {
 			log.Println("==>>> data writen")
 		}
-		//		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 		return
-		// -------------------------------------------------------
-		// --------------------- PUT HANDLER ---------------------
-		// -------------------------------------------------------
-	} else if r.Method == "PUT" {
-		id := getID(r, 0)
-		var putSuccess bool
-		log.Println("PUT id =", id)
-		body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576)) // read the body of the request
-		log.Println(body)
+	}
+	w.WriteHeader(http.StatusNotFound)
+	return
+}
+
+// DeleteRecord - http handler
+//=======================================================
+func DeleteRecord(w http.ResponseWriter, r *http.Request) {
+	var deleteSuccess bool // need to remove this var, but not now
+	vars := mux.Vars(r)
+	id, err := strconv.ParseUint(vars["record_id"], 10, 32)
+	if err != nil {
+		panic(err)
+	}
+	for i := range RecordsStore { // delete Record
+		if RecordsStore[i].ID == uint32(id) {
+			RecordsStore = append(RecordsStore[:i], RecordsStore[i+1:]...)
+			deleteSuccess = true
+			break
+		}
+	}
+	if deleteSuccess {
+		binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
 		if err != nil {
-			log.Fatalln("Error Change Record", err)
+			log.Fatalln("Error Delete Record marshalling data", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		if err := r.Body.Close(); err != nil {
-			log.Fatalln("Error Change Record", err)
-		}
-		if err := json.Unmarshal(body, &rec); err != nil { // unmarshall body contents
-			w.WriteHeader(http.StatusBadRequest)
-			log.Println(err)
-			if err := json.NewEncoder(w).Encode(err); err != nil {
-				log.Fatalln("Error Change Record unmarshalling data", err)
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-		}
-		log.Println(rec)
-		log.Println("New Description:", rec.Description)
-		log.Println("New Counter:", rec.Counter)
-		log.Println("New URL:", rec.URL)
-		for i := range RecordsStore { // change Record
-			if RecordsStore[i].ID == id {
-				if len(rec.Description) > 0 {
-					RecordsStore[i].Description = rec.Description
-				}
-				RecordsStore[i].Counter = rec.Counter
-				if len(rec.URL) > 0 {
-					RecordsStore[i].URL = rec.URL
-				}
-				putSuccess = true
-				break
-			}
-		}
-		if putSuccess {
-			binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
-			if err != nil {
-				log.Fatalln("Error Change Record marshalling data", err)
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-			if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
-				log.Println("JSONFFile write:", err)
-			} else {
-				log.Println("==>>> data writen")
-			}
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-		w.WriteHeader(http.StatusNotFound)
-		return
-		// ----------------------------------------------------------
-		// --------------------- DELETE HANDLER ---------------------
-		// ----------------------------------------------------------
-	} else if r.Method == "DELETE" {
-		var deleteSuccess bool // need to remove this var, but not now
-		id := getID(r, 0)
-		for i := range RecordsStore { // delete Record
-			if RecordsStore[i].ID == id {
-				RecordsStore = append(RecordsStore[:i], RecordsStore[i+1:]...)
-				deleteSuccess = true
-				break
-			}
-		}
-		if deleteSuccess {
-			binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
-			if err != nil {
-				log.Fatalln("Error Delete Record marshalling data", err)
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-			if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
-				log.Println("JSONFFile write:", err)
-			} else {
-				log.Println("==>>> data writen")
-			}
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-		w.WriteHeader(http.StatusNotFound)
-		return
-		// -------------------------------------------------------
-		// --------------------- GET HANDLER ---------------------
-		// -------------------------------------------------------
-	} else if r.Method == "GET" {
-		id := getID(r, 0) // get record id
-		if id == 0 {
-			w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-			w.WriteHeader(http.StatusOK)
-			if err := json.NewEncoder(w).Encode(RecordsStore); err != nil {
-				panic(err)
-			}
+		if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
+			log.Println("JSONFFile write:", err)
 		} else {
-			for i := range RecordsStore { // change Record
-				if RecordsStore[i].ID == id {
-					w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-					w.WriteHeader(http.StatusOK)
-					if err := json.NewEncoder(w).Encode(RecordsStore[i]); err != nil {
-						panic(err)
-					}
-					return
-				}
-			}
-			w.WriteHeader(http.StatusNotFound)
-			return
+			log.Println("==>>> data writen")
 		}
-	} else {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		w.WriteHeader(http.StatusOK)
+		return
 	}
-}
-
-// Extract a code from a URL. Return the default code if code
-// is missing or code is not a valid number.
-func getID(r *http.Request, defaultID uint32) uint32 {
-	p := strings.Split(r.URL.Path, "/v1/records/")
-	if len(p) == 1 {
-		return defaultID
-	} else if len(p) > 1 {
-		id, err := strconv.ParseUint(p[1], 10, 32)
-		if err == nil {
-			return uint32(id)
-		}
-		return defaultID
-	} else {
-		return defaultID
-	}
+	w.WriteHeader(http.StatusNotFound)
+	return
 }
