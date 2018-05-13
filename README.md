@@ -6,17 +6,17 @@
 
 id,description,counter,url
 
-* id - numeric record ID (autoincrement)
-* description - string description
-* counter - numeric (should support increment/decrement operations)
-* url - resource URL
+- id - numeric record ID (autoincrement)
+- description - string description
+- counter - numeric (should support increment/decrement operations)
+- url - resource URL
 
 ## REST API
 
-* GET http://example.com/v1/records/{record_id} - get records from table
-* POST http://example.com/v1/records - record creation 
-* PUT http://example.com/v1/records/{record_id} - record update (for now: counter update)
-* DELETE http://example.com/v1/records/{record_id} - delete record
+- GET <http://example.com/v1/records/{record_id}> - get records from table
+- POST <http://example.com/v1/records> - record creation
+- PUT <http://example.com/v1/records/{record_id}> - record update (for now: counter update)
+- DELETE <http://example.com/v1/records/{record_id}> - delete record
 
 ## TODO
 
