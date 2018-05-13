@@ -1,7 +1,9 @@
 # sermng
+
 1. manage single table JSON database with web app and REST API
 
 ## JSON FORMAT
+
 id,description,counter,url
 
 * id - numeric record ID (autoincrement)
@@ -17,6 +19,7 @@ id,description,counter,url
 * DELETE http://example.com/v1/records/{record_id} - delete record
 
 ## TODO
+
 - [x] full support of edit record (HTML/JS FE + GO/REST BE)
   - [x] add support for "GET single record" to REST API
   - [x] edit record support in HTML/JS FE
