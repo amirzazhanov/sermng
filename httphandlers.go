@@ -107,7 +107,7 @@ func ReadAllRecords(w http.ResponseWriter, r *http.Request) {
 
 // UpdateRecord - http handler
 func UpdateRecord(w http.ResponseWriter, r *http.Request) {
-	var putSuccess bool
+	//	var putSuccess bool
 	var rec Record
 	vars := mux.Vars(r)
 	id, err := strconv.ParseUint(vars["record_id"], 10, 32)
@@ -145,25 +145,40 @@ func UpdateRecord(w http.ResponseWriter, r *http.Request) {
 			if len(rec.URL) > 0 {
 				RecordsStore[i].URL = rec.URL
 			}
-			putSuccess = true
-			break
-		}
-	}
-	if putSuccess {
-		binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
-		if err != nil {
-			log.Fatalln("Error Change Record marshalling data", err)
-			w.WriteHeader(http.StatusInternalServerError)
+			//			putSuccess = true
+			//			break
+			binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
+			if err != nil {
+				log.Fatalln("Error Change Record marshalling data", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
+				log.Println("JSONFFile write:", err)
+			} else {
+				log.Println("=> data has been writen")
+			}
+			w.WriteHeader(http.StatusOK)
 			return
 		}
-		if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
-			log.Println("JSONFFile write:", err)
-		} else {
-			log.Println("==>>> data writen")
-		}
-		w.WriteHeader(http.StatusOK)
-		return
 	}
+	/*
+		if putSuccess {
+			binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
+			if err != nil {
+				log.Fatalln("Error Change Record marshalling data", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
+				log.Println("JSONFFile write:", err)
+			} else {
+				log.Println("=> data has been writen")
+			}
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+	*/
 	w.WriteHeader(http.StatusNotFound)
 	return
 }
