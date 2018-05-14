@@ -183,7 +183,7 @@ func DeleteRecord(w http.ResponseWriter, r *http.Request) {
 			if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
 				log.Println("JSONFFile write:", err)
 			} else {
-				log.Println("==>>> data writen")
+				log.Println("=> data has been writen")
 			}
 			w.WriteHeader(http.StatusOK)
 			return
