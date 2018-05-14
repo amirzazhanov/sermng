@@ -31,7 +31,7 @@ var RecordsStore Records
 func CreateRecord(w http.ResponseWriter, r *http.Request) {
 	var rec Record
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576)) // read the body of the request
-	log.Println(body)
+	log.Println("BODY DUMP:", string(body))
 	if err != nil {
 		log.Fatalln("Error AddRecord", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -65,7 +65,7 @@ func CreateRecord(w http.ResponseWriter, r *http.Request) {
 	if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
 		log.Println("JSONFFile write:", err)
 	} else {
-		log.Println("==>>> data writen")
+		log.Println("=> data writen")
 	}
 	//		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusCreated)
