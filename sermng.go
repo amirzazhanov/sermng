@@ -48,8 +48,9 @@ func main() {
 	var err error
 	var dir string
 
-	flag.StringVar(&dir, "dir", "./static", "the directory to serve files from. Defaults to the dir 'static'")
+	flag.StringVar(&dir, "dir", ".", "the directory to serve files from. Defaults to the dir 'static'")
 	flag.Parse()
+	log.Println("base directory for static html/js/css files:", dir)
 	// Open our ConfigFile
 	for _, v := range ConfigFileName {
 		ConfigFile, err = os.Open(v)
@@ -85,7 +86,7 @@ func main() {
 	// jsonFile's content into 'RecordsStore' which we defined above
 	json.Unmarshal(byteValue, &RecordsStore)
 	r := mux.NewRouter()
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(dir))))
+	r.PathPrefix("/static/").Handler(http.FileServer(http.Dir(dir)))
 	r.HandleFunc("/v1/records", CreateRecord).Methods("POST")
 	r.HandleFunc("/v1/records/{record_id:[0-9]+}", ReadRecord).Methods("GET")
 	r.HandleFunc("/v1/records", ReadAllRecords).Methods("GET")

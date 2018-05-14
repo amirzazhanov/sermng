@@ -114,9 +114,8 @@ func UpdateRecord(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	log.Println("PUT id =", id)
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576)) // read the body of the request
-	log.Println(body)
+	log.Println("BODY DUMP:", string(body))
 	if err != nil {
 		log.Fatalln("Error Change Record", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -126,6 +125,7 @@ func UpdateRecord(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln("Error Change Record", err)
 	}
 	if err := json.Unmarshal(body, &rec); err != nil { // unmarshall body contents
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(http.StatusBadRequest)
 		log.Println(err)
 		if err := json.NewEncoder(w).Encode(err); err != nil {
@@ -133,11 +133,9 @@ func UpdateRecord(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		return
 	}
-	log.Println(rec)
-	log.Println("New Description:", rec.Description)
-	log.Println("New Counter:", rec.Counter)
-	log.Println("New URL:", rec.URL)
+	log.Println("new_description:", rec.Description, "new_counter:", rec.Counter, "new_url:", rec.URL)
 	for i := range RecordsStore { // change Record
 		if RecordsStore[i].ID == uint32(id) {
 			if len(rec.Description) > 0 {
