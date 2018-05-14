@@ -166,7 +166,6 @@ func UpdateRecord(w http.ResponseWriter, r *http.Request) {
 // DeleteRecord - http handler
 //=======================================================
 func DeleteRecord(w http.ResponseWriter, r *http.Request) {
-	var deleteSuccess bool // need to remove this var, but not now
 	vars := mux.Vars(r)
 	id, err := strconv.ParseUint(vars["record_id"], 10, 32)
 	if err != nil {
@@ -175,24 +174,20 @@ func DeleteRecord(w http.ResponseWriter, r *http.Request) {
 	for i := range RecordsStore { // delete Record
 		if RecordsStore[i].ID == uint32(id) {
 			RecordsStore = append(RecordsStore[:i], RecordsStore[i+1:]...)
-			deleteSuccess = true
-			break
-		}
-	}
-	if deleteSuccess {
-		binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
-		if err != nil {
-			log.Fatalln("Error Delete Record marshalling data", err)
-			w.WriteHeader(http.StatusInternalServerError)
+			binBuffer, err := json.MarshalIndent(RecordsStore, "", "  ")
+			if err != nil {
+				log.Fatalln("Error Delete Record marshalling data", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
+				log.Println("JSONFFile write:", err)
+			} else {
+				log.Println("==>>> data writen")
+			}
+			w.WriteHeader(http.StatusOK)
 			return
 		}
-		if err := ioutil.WriteFile(JSONFile.Name(), binBuffer, 0755); err != nil {
-			log.Println("JSONFFile write:", err)
-		} else {
-			log.Println("==>>> data writen")
-		}
-		w.WriteHeader(http.StatusOK)
-		return
 	}
 	w.WriteHeader(http.StatusNotFound)
 	return
